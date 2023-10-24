@@ -7,7 +7,7 @@ import axios from 'axios';
 const EditMovieForm = (props) => {
   const navigate = useNavigate();
 
-  const { setMovies } = props;
+  const { setMovies, movies } = props;
   const [movie, setMovie] = useState({
     title: "",
     director: "",
@@ -16,6 +16,21 @@ const EditMovieForm = (props) => {
     description: ""
   });
 
+  const {id} = useParams();
+
+  //grab the movie that's being edited from the server
+  useEffect(() => {
+    axios.get(`http://localhost:9000/api/movies/${id}`)
+      .then(res => {
+        setMovie(res.data);
+        localStorage.setItem(`${res.data.id}`, JSON.stringify(res.data))
+      })
+      .catch(err => {
+        console.log(err.response);
+      })
+  }, []);
+
+  //edit the details of the movie in local state
   const handleChange = (e) => {
     setMovie({
       ...movie,
@@ -23,6 +38,7 @@ const EditMovieForm = (props) => {
     });
   }
 
+  //request the server update the database with your edits
   const handleSubmit = (e) => {
     e.preventDefault();
     axios.put(`http://localhost:9000/api/movies/${id}`, movie)
@@ -40,6 +56,7 @@ const EditMovieForm = (props) => {
   return (
     <div className="col">
       <div className="modal-content">
+
         <form onSubmit={handleSubmit}>
           <div className="modal-header">
             <h4 className="modal-title">Editing <strong>{movie.title}</strong></h4>
