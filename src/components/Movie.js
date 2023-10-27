@@ -4,7 +4,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Movie = (props) => {
-  const { addToFavorites } = props;
+  const { addToFavorites, deleteMovie } = props;
 
   const [movie, setMovie] = useState('');
 
@@ -19,7 +19,7 @@ const Movie = (props) => {
       .catch(err => {
         console.log(err.response);
       })
-  }, [id]);
+  }, []);
 
   return (<div className="modal-page col">
     <div className="modal-dialog">
@@ -52,7 +52,7 @@ const Movie = (props) => {
             <section>
               <span className="m-2 btn btn-dark" onClick={()=>addToFavorites(movie)}>Favorite</span>
               <Link to={`/movies/edit/${movie.id}`} className="m-2 btn btn-success">Edit</Link>
-              <span className="delete"><input type="button" className="m-2 btn btn-danger" value="Delete" /></span>
+              <span className="delete"><input type="button" className="m-2 btn btn-danger" value="Delete" onClick={()=>deleteMovie(id)}/></span>
             </section>
           </div>
         </div>
